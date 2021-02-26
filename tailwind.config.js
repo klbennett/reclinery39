@@ -8,12 +8,14 @@ module.exports = {
       center: true,
     },
     letterSpacing: {
+      wider: ".10em",
       widest: ".25em",
     },
     extend: {
       fontFamily: {
         sans: ["Roboto", ...defaultTheme.fontFamily.serif],
         serif: ["Playfair Display", ...defaultTheme.fontFamily.sans],
+        display: ["Georgia"],
       },
     },
   },
