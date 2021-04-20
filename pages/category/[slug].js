@@ -1,13 +1,19 @@
-import Articles from "../../components/articles";
+import Articles from "../../components/Articles";
 import { fetchAPI } from "../../lib/api";
-import Layout from "../../components/layout";
-import Seo from "../../components/seo";
+import Layout from "../../components/Layout";
+import Seo from "../../components/Seo";
+import Error from "../_error";
+import { data } from "autoprefixer";
 
-const Category = ({ category, categories }) => {
+const Category = ({ errorCode, category, categories }) => {
   const seo = {
     metaTitle: category.name,
     metaDescription: `All ${category.name} articles`,
   };
+
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
 
   return (
     <Layout categories={categories}>
@@ -38,7 +44,11 @@ export async function getStaticProps({ params }) {
   const categories = await fetchAPI("/categories");
 
   return {
-    props: { category, categories },
+    props: {
+      errorCode: data.errorCode,
+      category: data.category,
+      categories: data.categories,
+    },
     revalidate: 1,
   };
 }

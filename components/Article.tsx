@@ -1,12 +1,32 @@
+import React, { FunctionComponent } from 'react';
 import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
-import { fetchAPI } from "../../lib/api";
-import Layout from "../../components/layout";
-import Image from "../../components/image";
-import Seo from "../../components/seo";
-import { getStrapiMedia } from "../../lib/media";
+import { fetchAPI } from "../lib/api";
+import Layout from "../components/Layout";
+import Image from "../components/image";
+import Seo from "../components/seo";
+import { getStrapiMedia } from "../lib/media";
 
-const Article = ({ article, categories }) => {
+
+type ArticleProps = {
+  article: Article,
+  categories: []
+}
+
+interface Article {
+  image: string,
+  title: string,
+  description: string,
+  content: string,
+  slug: string,
+  published_at: string,
+  author: {
+    name: string,
+    picture: string,
+  },
+}
+
+const Article: FunctionComponent<ArticleProps> = ({ article, categories }) => {
   const imageUrl = getStrapiMedia(article.image);
 
   const seo = {
@@ -57,7 +77,7 @@ export async function getStaticPaths() {
   const articles = await fetchAPI("/articles");
 
   return {
-    paths: articles.map((article) => ({
+    paths: articles.map((article: Article) => ({
       params: {
         slug: article.slug,
       },

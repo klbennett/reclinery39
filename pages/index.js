@@ -3,7 +3,10 @@ import Card from "../components/Card";
 import Articles from "../components/Articles";
 import { fetchAPI } from "../lib/api";
 
-function Home({ articles, categories, homepage }) {
+function Home({ errorCode, articles, categories, homepage }) {
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
   return (
     <main className="bg-grey-100">
       <Nav />
@@ -144,7 +147,7 @@ function Home({ articles, categories, homepage }) {
       <h2 className="font-serif text-2xl m-8">Now on R39</h2>
 
       <div className="grid grid-cols-6 gap-8 justify-center pl-8 pr-8 md:pr-24 md:pl-24 m-12">
-        <Articles articles={articles} />
+        {articles && <Articles articles={articles} />}
       </div>
 
       {/* Carousel */}

@@ -6,6 +6,7 @@ import Image from "../../components/Image";
 import Card from "../../components/Card";
 
 import Seo from "../../components/Seo";
+import Error from "../_error";
 import { getStrapiMedia } from "../../lib/media";
 
 const Article = ({ article, categories }) => {
@@ -17,6 +18,10 @@ const Article = ({ article, categories }) => {
     shareImage: article.image,
     article: true,
   };
+
+  if (errorCode) {
+    return <Error statusCode={errorCode} />;
+  }
 
   return (
     <Layout categories={categories}>
