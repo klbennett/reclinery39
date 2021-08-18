@@ -9,7 +9,7 @@ import Seo from "../../components/Seo";
 import Error from "../_error";
 import { getStrapiMedia } from "../../lib/media";
 
-const Article = ({ article, categories }) => {
+const Article = ({ article, categories, errorCode }) => {
   const imageUrl = getStrapiMedia(article.image);
 
   const seo = {
@@ -55,22 +55,25 @@ const Article = ({ article, categories }) => {
 
 export async function getStaticPaths() {
   const articles = await fetchAPI("/articles");
-  return {
-    paths: articles.map((article) => ({
-      params: {
-        slug: article.slug,
-      },
-    })),
-    fallback: false,
-  };
+  // Get the paths we want to pre-render based on posts
+  const paths = articles.map((article) => ({
+    params: { slug: article.slug },
+  }));
+
+  return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }) {
-  const articles = await fetchAPI(`/articles?slug=${params.slug}`);
+  const data = await fetchAPI(`/articles?slug=${params.slug}`);
+  const errorCode = data.ok ? false : data.statusCode;
   const categories = await fetchAPI("/categories");
 
   return {
-    props: { article: articles[0], categories },
+    props: {
+      article: data[0],
+      categories,
+      errorCode: errorCode || null,
+    },
     revalidate: 1,
   };
 }
